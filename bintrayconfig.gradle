@@ -1,5 +1,5 @@
 if (!project.rootProject.file('local.properties').exists()) {
-    println "Not applying install.gradle"
+    throw new IllegalStateException("------------WARNING No local.properties - Exiting --------------")
     return
 }
 apply plugin: 'com.novoda.bintray-release'
@@ -27,6 +27,8 @@ task checkBintrayConfig {
         if (user == null || user.isEmpty() ||
                 key == null || key.isEmpty()) {
             throw new IllegalStateException("Must specify Bintray user/API key in your local.properties.")
+        } else {
+            println("Config set successfully.")
         }
     }
 }
@@ -39,12 +41,11 @@ def (user, key) = getBintrayUserAndKey()
 publish {
     bintrayUser = user
     bintrayKey = key
-    userOrg = 'pierfrancescosoffritti'
-    groupId = 'com.pierfrancescosoffritti.androidyoutubeplayer'
+    userOrg = 'knightduo'
+    groupId = 'com.knightduo.androidyoutubeplayer'
     uploadName = "android-youtube-player:$shard"
-    artifactId = shard
+    artifactId = "$shard"
     publishVersion = libVersion
     desc = libDescription
-    website = 'https://pierfrancescosoffritti.github.io/android-youtube-player'
     dryRun = false
 }
