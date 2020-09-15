@@ -37,6 +37,12 @@ interface YouTubePlayer {
      */
     fun seekTo(time: Float)
 
+    /**
+     *
+     * @param time The suggested rate of playback between 0f and 1.0f
+     * See https://developers.google.com/youtube/iframe_api_reference#setPlaybackRate for details.
+     */
+    fun setPlaybackRate(playbackRate: PlayerConstants.PlaybackRate)
     fun addListener(listener: YouTubePlayerListener): Boolean
     fun removeListener(listener: YouTubePlayerListener): Boolean
 }

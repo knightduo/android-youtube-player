@@ -23,6 +23,12 @@ interface YouTubePlayerListener {
     fun onPlaybackQualityChange(youTubePlayer: YouTubePlayer, playbackQuality: PlayerConstants.PlaybackQuality)
 
     /**
+     * Called when the video is loaded and the playback rates are available. Check [PlayerConstants.PlaybackRate] to see all the possible values.
+     * @param playbackRate a state from [PlayerConstants.PlaybackRate]
+     */
+    fun onPlaybackRatesAvailable(instance: YouTubePlayer, rates: List<PlayerConstants.PlaybackRate>)
+
+    /**
      * Called every time the speed of the playback changes. Check [PlayerConstants.PlaybackRate] to see all the possible values.
      * @param playbackRate a state from [PlayerConstants.PlaybackRate]
      */

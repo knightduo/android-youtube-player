@@ -91,9 +91,10 @@
             }
 
             function sendVideoData(player) {
-                var videoDuration = player.getDuration();
-
+                const videoDuration = player.getDuration();
                 YouTubePlayerBridge.sendVideoDuration(videoDuration);
+                const playbackRates = player.getAvailablePlaybackRates().map(rate => rate.toString());
+                YouTubePlayerBridge.sendAvailablePlaybackRates(playbackRates);
             }
 
             function sendStateChange(newState) {
@@ -112,6 +113,10 @@
 
         function seekTo(startSeconds) {        	
         	player.seekTo(startSeconds, true);
+        }
+
+        function setPlaybackRate(speed) {
+            player.setPlaybackRate(speed);
         }
 
         function pauseVideo() {
