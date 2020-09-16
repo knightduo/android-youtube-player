@@ -75,7 +75,7 @@ internal class WebViewYouTubePlayer constructor(context: Context, attrs: Attribu
     }
 
     override fun setPlaybackRate(playbackRate: PlayerConstants.PlaybackRate) {
-        mainThreadHandler.post { loadUrl("javascript:setPlaybackRate(${playbackRate.name})") }
+        mainThreadHandler.post { loadUrl("javascript:setPlaybackRate(${PlayerConstants.playbackRateMap[playbackRate]})") }
     }
 
     override fun destroy() {

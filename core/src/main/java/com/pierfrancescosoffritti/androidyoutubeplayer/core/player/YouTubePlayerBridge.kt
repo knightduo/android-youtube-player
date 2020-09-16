@@ -33,13 +33,6 @@ class YouTubePlayerBridge(private val youTubePlayerOwner: YouTubePlayerBridgeCal
         private const val QUALITY_HIGH_RES = "highres"
         private const val QUALITY_DEFAULT = "default"
 
-        private const val RATE_0_25 = "0.25"
-        private const val RATE_0_5 = "0.5"
-        private const val RATE_0_75 = "0.75"
-        private const val RATE_1 = "1"
-        private const val RATE_1_5 = "1.5"
-        private const val RATE_2 = "2"
-
         private const val ERROR_INVALID_PARAMETER_IN_REQUEST = "2"
         private const val ERROR_HTML_5_PLAYER = "5"
         private const val ERROR_VIDEO_NOT_FOUND = "100"
@@ -57,7 +50,7 @@ class YouTubePlayerBridge(private val youTubePlayerOwner: YouTubePlayerBridgeCal
 
     @JavascriptInterface
     fun sendYouTubeIFrameAPIReady() =
-        mainThreadHandler.post { youTubePlayerOwner.onYouTubeIFrameAPIReady() }
+            mainThreadHandler.post { youTubePlayerOwner.onYouTubeIFrameAPIReady() }
 
     @JavascriptInterface
     fun sendReady() {
@@ -91,10 +84,13 @@ class YouTubePlayerBridge(private val youTubePlayerOwner: YouTubePlayerBridgeCal
     fun sendPlaybackRateChange(rate: String) {
         val playbackRate = parsePlaybackRate(rate)
 
-        mainThreadHandler.post {
-            for (listener in youTubePlayerOwner.getListeners())
-                listener.onPlaybackRateChange(youTubePlayerOwner.getInstance(), playbackRate)
+        playbackRate?.let {
+            mainThreadHandler.post {
+                for (listener in youTubePlayerOwner.getListeners())
+                    listener.onPlaybackRateChange(youTubePlayerOwner.getInstance(), it)
+            }
         }
+
     }
 
     @JavascriptInterface
@@ -152,7 +148,7 @@ class YouTubePlayerBridge(private val youTubePlayerOwner: YouTubePlayerBridgeCal
     fun sendAvailablePlaybackRates(rates: Array<String>) {
         mainThreadHandler.post {
             for (listener in youTubePlayerOwner.getListeners())
-                listener.onPlaybackRatesAvailable(youTubePlayerOwner.getInstance(), rates.map{ parsePlaybackRate(it) })
+                listener.onPlaybackRatesAvailable(youTubePlayerOwner.getInstance(), rates.mapNotNull { parsePlaybackRate(it) })
         }
     }
 
@@ -206,16 +202,8 @@ class YouTubePlayerBridge(private val youTubePlayerOwner: YouTubePlayerBridgeCal
         }
     }
 
-    private fun parsePlaybackRate(rate: String): PlayerConstants.PlaybackRate {
-        return when {
-            rate.equals(RATE_0_25, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_0_25
-            rate.equals(RATE_0_5, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_0_5
-            rate.equals(RATE_0_75, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_0_75
-            rate.equals(RATE_1, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_1
-            rate.equals(RATE_1_5, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_1_5
-            rate.equals(RATE_2, ignoreCase = true) -> PlayerConstants.PlaybackRate.RATE_2
-            else -> PlayerConstants.PlaybackRate.UNKNOWN
-        }
+    private fun parsePlaybackRate(rate: String): PlayerConstants.PlaybackRate? {
+        return PlayerConstants.playbackRateMap.filterValues { it == rate }.keys.firstOrNull()
     }
 
     private fun parsePlayerError(error: String): PlayerConstants.PlayerError {

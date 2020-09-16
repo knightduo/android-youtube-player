@@ -17,4 +17,17 @@ class PlayerConstants {
     enum class PlaybackRate {
         UNKNOWN, RATE_0_25, RATE_0_5, RATE_0_75, RATE_1, RATE_1_5, RATE_2
     }
+
+    companion object {
+        val playbackRateMap = mapOf<PlaybackRate, String>(
+                PlaybackRate.UNKNOWN to "",
+                PlaybackRate.RATE_0_25 to "0.25",
+                PlaybackRate.RATE_0_5 to "0.5",
+                PlaybackRate.RATE_0_75 to "0.75",
+                PlaybackRate.RATE_1 to "1",
+                PlaybackRate.RATE_1_5 to "1.5",
+                PlaybackRate.RATE_2 to "2"
+
+        )
+    }
 }
